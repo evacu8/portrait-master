@@ -10,6 +10,23 @@ exports.add = async (req, res) => {
     if (title && author && email && file) {
       // if fields are not empty...
 
+      const authorRegex = new RegExp(/^[a-zA-Z]{1,}(?: [a-zA-Z]+){0,2}$/, "g");
+      const emailRegex = new RegExp(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "g"
+      );
+      const titleRegex = new RegExp(/^[a-zA-Z]{1,}(?: [a-zA-Z]+){0,2}$/, "g");
+
+      if (!authorRegex.test(author)) {
+        throw new Error("Invalid author");
+      }
+      if (!emailRegex.test(email)) {
+        throw new Error("Invalid email");
+      }
+      if (!titleRegex.test(title)) {
+        throw new Error("Invalid title");
+      }
+
       const fileName = file.path.split("/").slice(-1)[0]; // cut only filename from full path, e.g. C:/test/abc.jpg -> abc.jpg
       const fileExt = fileName.split(".").slice(-1)[0];
 
